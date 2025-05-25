@@ -28,6 +28,11 @@ const (
 
 const FormatMatcher = `\|(\w+)(?:-([a-zA-Z]+))?\|`
 
+const Digits = "0123456789"
+const Alphabet = "abcdefghijklmnopqrstuvwxyz"
+const Hex = "abcdef"
+const Symbols = " !\"#$%^&*()`+-./:;<=>?@[]\\_{}~,|"
+
 func GenMatchList(format_str string, file_contents []string) ([]RegReplace, [][]string) {
 	re := regexp.MustCompile(FormatMatcher)
 	matches := re.FindAllStringSubmatch(format_str, -1)
@@ -55,8 +60,9 @@ func GenMatchList(format_str string, file_contents []string) ([]RegReplace, [][]
 						file_content = strings.ToTitle(file_content)
 					}
 				}
-				match_list = append(match_list, RegReplace{FormatBlock: full, Items: strings.Split(file_content, "\n")})
-				iter_args = append(iter_args, strings.Split(file_content, "\n"))
+				slice_content := strings.Split(file_content, "\n")
+				match_list = append(match_list, RegReplace{FormatBlock: full, Items: slice_content})
+				iter_args = append(iter_args, slice_content)
 			} else {
 				slog.Info("File index was referenced, but length of file contents didn't match", "index_int", index_int, "len(file_contents)", len(file_contents))
 				log.Fatal("A file index was referenced that wasn't passed!")
@@ -66,20 +72,26 @@ func GenMatchList(format_str string, file_contents []string) ([]RegReplace, [][]
 			var chosen_charset string
 			switch index {
 			case "l":
-				chosen_charset = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z"
+				chosen_charset = Alphabet
 			case "d":
-				chosen_charset = "0,1,2,3,4,5,6,7,8,9"
-			case "h":
-				chosen_charset = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f"
+				chosen_charset = Digits
+			case "x":
+				chosen_charset = Digits + Hex
+			case "s":
+				chosen_charset = Symbols
+			case "a":
+				chosen_charset = Alphabet + strings.ToUpper(Alphabet) + Digits + Symbols
 			default:
-				chosen_charset = ""
+				chosen_charset = Alphabet
 			}
 			if mod == "upper" {
 				chosen_charset = strings.ToUpper(chosen_charset)
 			}
 
-			match_list = append(match_list, RegReplace{FormatBlock: full, Items: strings.Split(chosen_charset, ",")})
-			iter_args = append(iter_args, strings.Split(chosen_charset, ","))
+			char_slice := strings.Split(chosen_charset, "")
+
+			match_list = append(match_list, RegReplace{FormatBlock: full, Items: char_slice})
+			iter_args = append(iter_args, char_slice)
 		}
 	}
 	return match_list, iter_args
