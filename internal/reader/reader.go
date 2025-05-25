@@ -2,6 +2,7 @@ package reader
 
 import (
 	"os"
+	"strings"
 )
 
 func ReadFiles(paths []string) ([]string, error) {
@@ -11,7 +12,7 @@ func ReadFiles(paths []string) ([]string, error) {
 		if err != nil {
 			return []string{}, err
 		}
-		res = append(res, string(file_out))
+		res = append(res, strings.TrimSpace(string(file_out)))
 	}
 	return res, nil
 }
