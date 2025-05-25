@@ -1,0 +1,104 @@
+PWLIST(1)
+==========
+:doctype: manpage
+:manmanual: Password Wordlist Generator
+:mansource: pwlist: {version}
+
+
+NAME
+----
+pwlist - Password List Generator
+
+
+SYNOPSIS
+--------
+*pwlist* ['OPTIONS'] _FILES_...
+
+
+DESCRIPTION
+-----------
+This tool is designed to help create simple wordlists based on defined masks and
+combinations with already existing wordlists. "Hashcat" is usually the preferred
+utility for larger files and more complex masks, but this allows for just a
+simple utility to create basic modifications that may not be possible with just
+hashcat. This program is best used in conjunction with Hashcat and its
+masks/rules, but if you need a quick modification made to a wordlist, this is
+the tool.
+
+OPTIONS
+-------
+*-format*='FORMATSTRING'::
+	Identifies the format and masks to use in the output.
+
+*-rtable*=['NTLM', 'MD5', 'SHA1', 'SHA256', 'SHA512']::
+	Creates basic rainbow tables with common un-salted hashes. The hash is
+	placed before the wordlist entry, and separated with a colon.
+
+*-version*::
+    Print the version and exit.
+
+*-v*::
+    Verbose logging.
+
+FORMATSTRING
+~~~~~~~~~~~~
+The format string allows for any text to be entered that will be joined with
+other masks and wordlist files. To enter masks/wordlist files, you may use
+vertical bars to create specialized commands that then run and handle parsing.
+These commands can have additional modifications attached to them, usually to
+adjust the case of the line. For example, if I wanted to load the hexadecimal
+charset, I could insert "|x|" somewhere in the format string, and it would
+generate. If I wanted to ensure that the hexadecimal letters were capitalized,
+I could do "|h-upper|". All masks by default are lowercase, if applicable. All
+possible masks are explained below.
+
+- |l| - Latin Alphabet. Supports "upper" modification.
+- |d| - Arabic Numerals 0-9.
+- |s| - Symbols. <space>!\"#$%^&*()`+-./:;<=>?@[]\\_{}~,|
+- |x| - Hexadecimal 0-9 a-f. Supports "upper" modification.
+- |a| - l, l-upper, d, and s.
+
+When loading a wordlist, pass it as additional arguments after OPTIONS. To use
+the files when formatting, use the position the file was loaded in, starting
+with 0. For example, if I want to load the second file passed, and apply the
+"upper" modification to it, I could do "|1-upper|". Modifications are available
+for lowercase (-'lower'), uppercase (-'upper'), and title case (-'title').
+
+BUGS
+----
+See the issues on the pwlist GitHub repository:
+https://github.com/amyy54/pwlist/issues
+
+
+AUTHOR
+------
+Amy C public@amyy.me
+
+
+RESOURCES
+---------
+GitHub: https://github.com/amyy54/pwlist
+
+
+COPYRIGHT
+---------
+Copyright (c) 2025 Amy C
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
