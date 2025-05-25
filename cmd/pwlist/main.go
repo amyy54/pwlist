@@ -30,7 +30,7 @@ func main() {
 	log.SetFlags(log.Lshortfile)
 
 	flag.StringVar(&format_str, "format", "", "Format to use. See man page for details.")
-	flag.StringVar(&rtable, "rtable", "", "Run a hash function and display it alongside the password. [MD5, SHA1, SHA256, SHA512]")
+	flag.StringVar(&rtable, "rtable", "", "Run a hash function and display it alongside the password. [NTLM, MD5, SHA1, SHA256, SHA512]")
 	flag.BoolVar(&v, "v", false, "Verbose.")
 	flag.BoolVar(&version, "version", false, "Print the version and exit.")
 	flag.Parse()
