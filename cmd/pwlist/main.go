@@ -73,7 +73,7 @@ func main() {
 
 	file_contents, err := reader.ReadFiles(files)
 	if err != nil {
-		log.Fatalf("Could not read one or more files. Error: ", err)
+		log.Fatalf("Could not read one or more files. Error: %s", err)
 		os.Exit(1)
 	}
 
